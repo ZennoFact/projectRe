@@ -3,4 +3,4 @@
 var remote = require('remote');
 var csvToJson = remote.require('./lib/csvToJson');
 
-csvToJson.readCSV();
+csvToJson.readCSV('./database.csv');

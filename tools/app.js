@@ -3,6 +3,9 @@
 var app = require('app');
 var BrowserWindow = require('browser-window');
 var Menu = require('menu');
+var path = require('path');
+// var csvToJson = require('./lib/csvToJson');
+
 
 require('crash-reporter').start();
 
@@ -28,25 +31,27 @@ var template = [
   {
     label: 'CtoJ',
     submenu: [
-      {label: 'Quit', accelerator: 'Command+Q', click: function () {app.quit();}}
+      {label: 'Quit', accelerator: 'Alt+F4', click: function () {app.quit();}}
     ]
   }, {
     label: 'File',
     submenu: [
-      {label: 'Open', accelerator: 'Command+O', click: function() {
-        // require('dialog').showOpenDialog({ properties: ['openDirectory']}, function (baseDir){
-        //   if(baseDir && baseDir[0]) {
-        //     openWindow(baseDir[0]);
-        //   }
-        // });
-
+      {label: 'Open', accelerator: 'Ctrl+O', click: function() {
+        require('dialog').showOpenDialog({ properties: ['openFile']}, function (filePath){
+          if (path.extname(filePath) === ".csv") {
+            console.log(filePath);
+            // document.getElementById("system-message").innerHTML = filePath;
+          } else {
+            // file is not .csv
+          }
+        });
       }}
     ]
   }, {
     label: 'View',
     submenu: [
-      { label: 'Reload', accelerator: 'Command+R', click: function() { BrowserWindow.getFocusedWindow().reloadIgnoringCache(); } },
-      { label: 'Toggle DevTools', accelerator: 'Alt+Command+I', click: function() { BrowserWindow.getFocusedWindow().toggleDevTools(); } }
+      { label: 'Reload', accelerator: 'Ctrl+R', click: function() { BrowserWindow.getFocusedWindow().reloadIgnoringCache(); } },
+      { label: 'Toggle DevTools', accelerator: 'F12', click: function() { BrowserWindow.getFocusedWindow().toggleDevTools(); } }
     ]
   }
 ];
