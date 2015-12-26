@@ -1,9 +1,9 @@
 [
   {
-    "title": "html",
+    "title": "HTML",
     "path": "./html.md",
     "tag1": "web",
-    "tag2": "front",
+    "tag2": "frontend",
     "tag3": "markup"
   },
   {
@@ -14,10 +14,10 @@
     "tag3": ""
   },
   {
-    "title": "js",
+    "title": "Java Script",
     "path": "./js.md",
     "tag1": "web",
-    "tag2": "front",
+    "tag2": "frontend",
     "tag3": "program"
   }
 ]
