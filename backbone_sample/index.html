@@ -5,9 +5,19 @@
     <title>BacboneJS Sample</title>
   </head>
   <body>
+    <div id="todo"></div>
+    <!-- render()にてUnderscore.jsのマイクロテンプレートを利用する例 -->
+    <script type="text/template" id="item-template">
+      <div>
+        <input id="todo_complate" type="checkbox" <%= completed ? 'checked="checked"' : '' %> >
+        <%= title %>
+      </div>
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
-    <script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
-    <script src="./scripts/index.js"></script>
+    <!-- <script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+    <script src="http://documentcloud.github.com/backbone/backbone-min.js"></script> -->
+    <script src="./scripts/lib/underscore-min.js"></script>
+    <script src="./scripts/lib/backbone-min.js"></script>
+    <script src="./scripts/model_sample.js"></script>
   </body>
 </html>
