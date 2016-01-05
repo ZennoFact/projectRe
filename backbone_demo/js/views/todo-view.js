@@ -7,15 +7,17 @@ var app = app || {};
 	// Todo Item View
 	// --------------
 
-	// The DOM element for a todo item...
+	// Todoアイテム用のDOM要素を作成
 	app.TodoView = Backbone.View.extend({
-		//... is a list tag.
+		//　Todoアイテムはliタグで作成
 		tagName:  'li',
 
 		// Cache the template function for a single item.
+		// itemテンプレートを取得しキャッシュする。このデータをもとにTodoアイテムを表示していく
 		template: _.template($('#item-template').html()),
 
 		// The DOM events specific to an item.
+		// Todoアイテム特有のるDOMイベントを設定していく
 		events: {
 			'click .toggle': 'toggleCompleted',
 			'dblclick label': 'edit',
@@ -24,17 +26,17 @@ var app = app || {};
 			'blur .edit': 'close'
 		},
 
-		// The TodoView listens for changes to its model, re-rendering. Since there's
-		// a one-to-one correspondence between a **Todo** and a **TodoView** in this
-		// app, we set a direct reference on the model for convenience.
+		// Todo.ModelとTodo.Viewをバインドして，その変更を受け付けるようにする
+		// こうやって直接参照するようバインディングしておくと便利
 		initialize: function () {
 			this.listenTo(this.model, 'change', this.render);
 			this.listenTo(this.model, 'destroy', this.remove);
 			this.listenTo(this.model, 'visible', this.toggleVisible);
 		},
 
-		// Re-render the titles of the todo item.
+		// Todoアイテムのタイトルを再描画していく
 		render: function () {
+			// Todo.Modelの情報をテンプレートに流し込んでいく
 			this.$el.html(this.template(this.model.toJSON()));
 			this.$el.toggleClass('completed', this.model.get('completed'));
 			this.toggleVisible();
@@ -48,24 +50,24 @@ var app = app || {};
 
 		isHidden: function () {
 			var isCompleted = this.model.get('completed');
-			return (// hidden cases only
+			return (// hiddenの場合のみを処理するメソッド
 				(!isCompleted && app.TodoFilter === 'completed') ||
 				(isCompleted && app.TodoFilter === 'active')
 			);
 		},
 
-		// Toggle the `"completed"` state of the model.
+		// Todoアイテムの完了，未了の切り替え
 		toggleCompleted: function () {
 			this.model.toggle();
 		},
 
-		// Switch this view into `"editing"` mode, displaying the input field.
+		// 編集モードに変更して，input領域を表示し，その領域にフォーカスを与える
 		edit: function () {
 			this.$el.addClass('editing');
 			this.$input.focus();
 		},
 
-		// Close the `"editing"` mode, saving changes to the todo.
+		// 編集モードを終了すると同時に，情報を永続化する
 		close: function () {
 			var value = this.$input.val();
 			var trimmedValue = value.trim();
@@ -77,6 +79,7 @@ var app = app || {};
 					// Model values changes consisting of whitespaces only are not causing change to be triggered
 					// Therefore we've to compare untrimmed version with a trimmed one to chech whether anything changed
 					// And if yes, we've to trigger change event ourselves
+					// TODO: triggerとはなにか
 					this.model.trigger('change');
 				}
 			} else {
@@ -86,14 +89,14 @@ var app = app || {};
 			this.$el.removeClass('editing');
 		},
 
-		// If you hit `enter`, we're through editing the item.
+		// Enterきーを入力すると編集を終了し，入力領域を閉じる
 		updateOnEnter: function (e) {
 			if (e.which === ENTER_KEY) {
 				this.close();
 			}
 		},
 
-		// Remove the item, destroy the model from *localStorage* and delete its view.
+		// Todoアイテムの削除と同時に，LocalStorageからも情報を削除
 		clear: function () {
 			this.model.destroy();
 		}

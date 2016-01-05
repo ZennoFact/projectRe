@@ -4,29 +4,27 @@ var app = app || {};
 (function ($) {
 	'use strict';
 
-	// The Application
-	// ---------------
+	// アプリケーションの起動
+	// TODO: ここの処理をしっかりと把握
 
-	// Our overall **AppView** is the top-level piece of UI.
+	// UIの最上位に「AppView」 を設置.
 	app.AppView = Backbone.View.extend({
 
-		// Instead of generating a new element, bind to the existing skeleton of
-		// the App already present in the HTML.
+		// HTMLに作成しておいた'#todoapp'をelementとして利用
 		el: '#todoapp',
 
-		// Our template for the line of statistics at the bottom of the app.
+		// statsテンプレートを設定
 		statsTemplate: _.template($('#stats-template').html()),
 
-		// Delegated events for creating new items, and clearing completed ones.
+		// 初期化時の一度だけ，イベントの設定を実施
 		events: {
 			'keypress #new-todo': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
 			'click #toggle-all': 'toggleAllComplete'
 		},
 
-		// At initialization we bind to the relevant events on the `Todos`
-		// collection, when items are added or changed. Kick things off by
-		// loading any preexisting todos that might be saved in *localStorage*.
+		// Todoアイテムの追加や変更に伴って「Todos」コレクションのイベントとバインドしてアプリケーションを初期化。
+		// localStorage上に事前にアイテムが存在している場合.そのアイテムを呼び出す
 		initialize: function () {
 			this.allCheckbox = this.$('#toggle-all')[0];
 			this.$input = this.$('#new-todo');
@@ -39,14 +37,14 @@ var app = app || {};
 			this.listenTo(app.todos, 'filter', this.filterAll);
 			this.listenTo(app.todos, 'all', this.render);
 
-			// Suppresses 'add' events with {reset: true} and prevents the app view 
-			// from being re-rendered for every model. Only renders when the 'reset'
-			// event is triggered at the end of the fetch.
+
+			// 再描画が全モデルから呼び出されないために抑制する。
+			// 描画はresetイベントをもとに発火し，fetchイベントの終了とともに，callbackのresetが動く
+			// 本来fetchメソッドは外部との通信に使用する設定なんかが行えたりする
 			app.todos.fetch({reset: true});
 		},
 
-		// Re-rendering the App just means refreshing the statistics -- the rest
-		// of the app doesn't change.
+		// 描画用メソッド。アプリに変更がかからない場合，描画は実行されない
 		render: function () {
 			var completed = app.todos.completed().length;
 			var remaining = app.todos.remaining().length;
@@ -72,14 +70,13 @@ var app = app || {};
 			this.allCheckbox.checked = !remaining;
 		},
 
-		// Add a single todo item to the list by creating a view for it, and
-		// appending its element to the `<ul>`.
+		// 一つのtodoアイテムをliとしてulに追加
 		addOne: function (todo) {
 			var view = new app.TodoView({ model: todo });
 			$('#todo-list').append(view.render().el);
 		},
 
-		// Add all items in the **Todos** collection at once.
+		// 現存しているすべてのtodoアイテムを一度だけ，アプリケーションに追加
 		addAll: function () {
 			this.$('#todo-list').html('');
 			app.todos.each(this.addOne, this);
@@ -93,7 +90,7 @@ var app = app || {};
 			app.todos.each(this.filterOne, this);
 		},
 
-		// Generate the attributes for a new Todo item.
+		// 新規アイテムの属性を設定
 		newAttributes: function () {
 			return {
 				title: this.$input.val().trim(),
@@ -102,23 +99,26 @@ var app = app || {};
 			};
 		},
 
-		// If you hit return in the main input field, create new **Todo** model,
-		// persisting it to *localStorage*.
+		// input領域でEnterキーを叩くと新しいTodoが作成され，LocalStorageに保存される
 		createOnEnter: function (e) {
+			// String.trim()は文字列の両端にある空白を削除する。空白の場合はfalse
+			// 押されたのがEnterキーではないor空白の入力で何もせずに抜ける
 			if (e.which !== ENTER_KEY || !this.$input.val().trim()) {
 				return;
 			}
 
 			app.todos.create(this.newAttributes());
+			// 入力とともにinput領域を空白に
 			this.$input.val('');
 		},
 
-		// Clear all completed todo items, destroying their models.
+		// TODO: ここ，もうちょい適切な説明を
+		// Todoアイテムの削除が完了すると表示もクリアする
 		clearCompleted: function () {
 			_.invoke(app.todos.completed(), 'destroy');
 			return false;
 		},
-
+		// Todoアイテムの完了チェックを一括で行うためのメソッド
 		toggleAllComplete: function () {
 			var completed = this.allCheckbox.checked;
 

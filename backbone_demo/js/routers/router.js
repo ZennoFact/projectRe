@@ -1,6 +1,6 @@
 /*global Backbone */
 var app = app || {};
-
+// TODO: ここの処理の解説
 (function () {
 	'use strict';
 
@@ -17,6 +17,7 @@ var app = app || {};
 
 			// Trigger a collection filter event, causing hiding/unhiding
 			// of Todo view items
+			// Todo.Modelのフィルターイベントをトリガーとして，Todoアイテムの常時非表示を切り替えるるためのもの
 			app.todos.trigger('filter');
 		}
 	});

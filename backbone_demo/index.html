@@ -24,6 +24,14 @@
 			<p>作: <a href="https://github.com/addyosmani">Addy Osmani</a></p>
 			<p><a href="http://todomvc.com">TodoMVC</a>の一部として開発</p>
 		</footer>
+		<!--
+			Backbone.js（で利用するunderscore.js）が使用するviewのテンプレートを定義
+			ここでのテンプレートの記述はHTML内にPHPのコードを記載する方法と同じようなものなので難しいことはないと思う
+			注意すべき点は，<%=  %>と<%-  %>の違い。
+			<%-  %>はエスケープ処理がなされるため，純粋なデータの出力などに利用
+			<%=  %>はエスケープ処理が行われないため，コードの記述などが可能（この例では三項演算子を利用するなどを行っている）
+	 	-->
+		<!-- todoの個別のアイテムに関するテンプレート -->
 		<script type="text/template" id="item-template">
 			<div class="view">
 				<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
@@ -32,6 +40,7 @@
 			</div>
 			<input class="edit" value="<%- title %>">
 		</script>
+		<!-- todoの状態を管理するための情報を表示するためのテンプレート -->
 		<script type="text/template" id="stats-template">
 			<span id="todo-count">残り<strong><%= remaining %></strong>件</span>
 			<ul id="filters">
@@ -49,6 +58,7 @@
 			<button id="clear-completed">完了済みの項目を消去 (<%= completed %>件)</button>
 			<% } %>
 		</script>
+		<!-- JSファイルの読み込み -->
 		<script src="./js/lib/jquery.min.js"></script>
 		<script src="./js/lib/underscore.js"></script>
 		<script src="./js/lib/backbone-min.js"></script>
