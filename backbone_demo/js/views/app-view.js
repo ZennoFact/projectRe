@@ -112,9 +112,10 @@ var app = app || {};
 			this.$input.val('');
 		},
 
-		// TODO: ここ，もうちょい適切な説明を
 		// Todoアイテムの削除が完了すると表示もクリアする
 		clearCompleted: function () {
+			// underscore.jsの機能
+			// _.invoke(list, methodName, [*arguments])
 			_.invoke(app.todos.completed(), 'destroy');
 			return false;
 		},

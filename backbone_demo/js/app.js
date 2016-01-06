@@ -3,6 +3,7 @@
 var app = app || {};
 // Enterキーのキーコードを定数として設定
 var ENTER_KEY = 13;
+console.log(app);
 
 // この記述でwindow.onLoad()と同等の実行を行うjQueryの記法
 $(function () {

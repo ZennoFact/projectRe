@@ -1,6 +1,6 @@
 /*global Backbone */
 var app = app || {};
-// TODO: ここの処理の解説
+// フィルタリングの実施
 (function () {
 	'use strict';
 
@@ -11,13 +11,12 @@ var app = app || {};
 			'*filter': 'setFilter'
 		},
 
+		// ＵＲＬで#/以降の部分を渡して，
 		setFilter: function (param) {
-			// Set the current filter to be used
 			app.TodoFilter = param || '';
 
-			// Trigger a collection filter event, causing hiding/unhiding
-			// of Todo view items
-			// Todo.Modelのフィルターイベントをトリガーとして，Todoアイテムの常時非表示を切り替えるるためのもの
+			// Todo.Modelのフィルターイベントをトリガーとして，Todoアイテムの常時非表示を切り替えるためのもの
+			// trigger()はｊQueryの機能
 			app.todos.trigger('filter');
 		}
 	});

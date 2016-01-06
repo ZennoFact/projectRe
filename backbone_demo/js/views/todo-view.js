@@ -76,10 +76,7 @@ var app = app || {};
 				this.model.save({ title: trimmedValue });
 
 				if (value !== trimmedValue) {
-					// Model values changes consisting of whitespaces only are not causing change to be triggered
-					// Therefore we've to compare untrimmed version with a trimmed one to chech whether anything changed
-					// And if yes, we've to trigger change event ourselves
-					// TODO: triggerとはなにか
+					// 独自イベントを設定
 					this.model.trigger('change');
 				}
 			} else {
